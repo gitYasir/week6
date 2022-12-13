@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="NorthwindWPF.MainWindow">
+    <Position X="1" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABACBAAAAAAAAAAACAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_customerManager" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NorthwindBusiness.CustomerManager">
+    <Position X="4.5" Y="1" Width="3" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="SelectedCustomer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="NorthwindData.Customer">
+    <Position X="9.5" Y="1" Width="3" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
