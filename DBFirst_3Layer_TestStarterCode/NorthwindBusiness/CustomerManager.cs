@@ -50,8 +50,14 @@ namespace NorthwindBusiness {
             customer.City = city;
             customer.PostalCode = postcode;
             customer.Country = country;
-            _service.SaveCustomerChanges();
-            SelectedCustomer = customer;
+            try {
+                _service.SaveCustomerChanges();
+                SelectedCustomer = customer;
+            }
+            catch ( Exception e ) {
+                Debug.WriteLine( $"Error updating {customerId}" );
+                return false;
+            }
             return true;
         }
 
