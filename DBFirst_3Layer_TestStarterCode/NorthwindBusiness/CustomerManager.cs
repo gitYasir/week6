@@ -31,13 +31,7 @@ namespace NorthwindBusiness {
         public void Create( string customerId, string contactName, string companyName, string city = null ) {
 
             var newCust = new Customer() { CustomerId = customerId, ContactName = contactName, CompanyName = companyName, City = city };
-            _service.CreateCustomer(
-            new Customer() {
-                CustomerId = customerId,
-                ContactName = contactName,
-                CompanyName = companyName,
-            }
-            );
+            _service.CreateCustomer( newCust );
         }
 
         public bool Update( string customerId, string contactName, string country, string city, string postcode ) {
@@ -56,14 +50,19 @@ namespace NorthwindBusiness {
             }
             catch ( Exception e ) {
                 Debug.WriteLine( $"Error updating {customerId}" );
+                Console.WriteLine( e );
                 return false;
             }
             return true;
         }
 
-        public void Delete( string customerId ) {
+        public bool Delete( string customerId ) {
             var cust = _service.GetCustomerById( customerId );
+            if ( cust == null ) {
+                return false;
+            }
             _service.RemoveCustomer( cust );
+            return true;
         }
     }
 }

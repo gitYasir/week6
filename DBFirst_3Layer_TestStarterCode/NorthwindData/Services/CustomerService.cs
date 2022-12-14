@@ -19,7 +19,7 @@ namespace NorthwindData.Services {
         }
         //
         public Customer GetCustomerById( string customerId ) {
-            return _context.Customers.Where( w => w.CustomerId == customerId ).FirstOrDefault();
+            return _context.Customers.Find( customerId );
         }
         //
         public List<Customer> GetCustomerList() {
