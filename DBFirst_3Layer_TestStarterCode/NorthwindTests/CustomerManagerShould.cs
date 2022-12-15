@@ -4,6 +4,7 @@ using NorthwindBusiness;
 using NorthwindData;
 using NorthwindData.Services;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace NorthwindTests {
     public class CustomerManagerShould {
@@ -191,12 +192,12 @@ namespace NorthwindTests {
         public void GivenAValidId_Delete_ShouldReturnTrue() {
             var mockObject = new Mock<ICustomerService>();
             var originalCustomer = new Customer {
-                CustomerId = "MANDA"
+                CustomerId = "YI"
             };
-            mockObject.Setup( cs => cs.GetCustomerById( "MANDA" ) ).Returns( originalCustomer );
+            mockObject.Setup( cs => cs.GetCustomerById( "YI" ) ).Returns( originalCustomer );
 
             _sut = new CustomerManager( mockObject.Object );
-            var result = _sut.Delete( "MANDA" );
+            var result = _sut.Delete( "YI" );
             Assert.That( result, Is.True );
         }
 
@@ -210,6 +211,67 @@ namespace NorthwindTests {
             var result = _sut.Delete( It.IsAny<string>() );
             Assert.That( result, Is.False );
 
+        }
+
+        [Test]
+        public void WhenUpdateIsCalledWithValidId_SaveCustomerChanges_IsCalledOnce() {
+            // Arrange
+            var mockCustomerService = new Mock<ICustomerService>();
+            mockCustomerService.Setup(
+                cs => cs.GetCustomerById( "ROCK" ) )
+                    .Returns( new Customer() );
+
+            _sut = new CustomerManager( mockCustomerService.Object );
+
+            // Act
+            var result = _sut.Update(
+                "ROCK", It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>() );
+
+            // Assert
+            mockCustomerService.Verify(
+                cs => cs.SaveCustomerChanges(),
+                Times.Once );
+        }
+
+        [Test]
+        public void LetsSeeWhatHappens_WhenUpdateIsCalled_IfAllInvocationsArentSetUp() {
+            // Arrange
+            var mockCustomerService = new Mock<ICustomerService>( MockBehavior.Strict );
+            mockCustomerService.Setup(
+                cs => cs.GetCustomerById( It.IsAny<string>() ) )
+                .Returns( new Customer() );
+            mockCustomerService.Setup( cs => cs.SaveCustomerChanges() );
+            _sut = new CustomerManager( mockCustomerService.Object );
+
+            // Act
+            var result = _sut.Update(
+                "ROCK", It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<string>(), It.IsAny<string>() );
+
+            // Assert
+            Assert.That( result );
+        }
+
+        [Test]
+        public void WhenGetCustomerListIsCalled_RetrieveAll_ReaturnsCustomerList() {
+            var mockCustomerService = new Mock<ICustomerService>();
+            mockCustomerService.Setup( cs => cs.GetCustomerList() ).Returns( new List<Customer>() );
+
+            _sut = new CustomerManager( mockCustomerService.Object );
+            _sut.RetrieveAll();
+
+            mockCustomerService.Verify( cs => cs.GetCustomerList(), Times.Once );
+        }
+
+        [Test]
+        public void CallRemoveCustomer_WhenDeleteIsCalled_WithValidCustomer() {
+            var mockCustomerService = new Mock<ICustomerService>();
+            mockCustomerService.Setup( cs => cs.GetCustomerById( It.IsAny<string>() ) ).Returns( new Customer() );
+            _sut = new CustomerManager( mockCustomerService.Object );
+            _sut.Delete( It.IsAny<string>() );
+
+            mockCustomerService.Verify( cs => cs.RemoveCustomer( It.IsAny<Customer>() ), Times.Once );
         }
     }
 }
